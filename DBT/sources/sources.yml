@@ -1,0 +1,18 @@
+sources:
+  - name: source_bronze
+    database: puspark_dbt  
+    schema:  bronze 
+    tables: 
+      - name: trips
+  
+
+  - name: source_silver
+    database: puspark_dbt  
+    schema:  silver 
+    tables: 
+      - name: trips
+      - name: customers
+      - name: payments
+      - name: drivers
+      - name: locations
+      - name: vehicles

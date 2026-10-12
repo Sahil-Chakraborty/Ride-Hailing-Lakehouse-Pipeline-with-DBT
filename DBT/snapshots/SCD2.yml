@@ -1,0 +1,30 @@
+snapshots:
+  - name: customers_snapshot
+    relation: source('source_silver', 'customers')
+    config:
+      schema: gold
+      database: puspark_dbt
+      unique_key: customer_id
+      strategy: timestamp
+      updated_at: last_updated_timestamp
+      dbt_valid_to_current: "to_date('9999-12-31')"
+
+  - name: drivers_snapshot
+    relation: source('source_silver', 'drivers')
+    config:
+      schema: gold
+      database: puspark_dbt
+      unique_key: driver_id
+      strategy: timestamp
+      updated_at: last_updated_timestamp
+      dbt_valid_to_current: "to_date('9999-12-31')"
+      
+  - name: vehicles_snapshot
+    relation: source('source_silver', 'vehicles')
+    config:
+      schema: gold
+      database: puspark_dbt
+      unique_key: vehicle_id
+      strategy: timestamp
+      updated_at: last_updated_timestamp
+      dbt_valid_to_current: "to_date('9999-12-31')"
