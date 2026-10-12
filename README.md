@@ -16,9 +16,13 @@ The pipeline follows a Medallion Architecture:
 
 Streaming runs up to Silver. dbt is a batch SQL tool, so it reads the Silver tables on a schedule to build Gold.
 
+
 ### Architecture Diagram
 
-![Architecture Diagram](Architechture Diagram/Architecture.png)
+
+<p align="center">
+  <img src="Architechture Diagram/Architecture.png" width="700">
+</p>
 
 ---
 
@@ -128,7 +132,6 @@ Revenue and trip KPIs count Completed and Ongoing trips. Cancelled trips are exc
 - **Ordering by processing time.** Using `_ingested_at` as the ordering column let a stale record overwrite newer data and left in-batch duplicates unresolved. Switching customers to the business timestamp (`last_updated_timestamp`) fixed both.
 - **How it was tested.** A 68-row test batch (60 new customers, 5 updates, 1 stale record, 2 extra versions of one customer) took Bronze from 200 to 268 rows and Silver from 200 to 260. The stale record was rejected and the five updated customers each got a second version in the SCD2 snapshot.
 - **Shared checkpoint paths.** A missing f-string made every stream write to the same checkpoint folder. Fixed by building the path from the entity name.
-- **dbt schema naming.** dbt prefixed schema names with a personal dev schema. Fixed with a custom `generate_schema_name` macro.
 - **Duplicate keys break MERGE.** A dbt model that read Bronze directly hit duplicate keys, so Gold now reads the cleaned Silver tables.
 - **Empty joins on history.** A snapshot's first version starts at that record's own timestamp, so older trips found no match. Fixed by treating each key's earliest version as valid from the beginning.
 
